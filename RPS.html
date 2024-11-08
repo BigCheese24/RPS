@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+</head>
+<body>
+    <h1>Rock Paper Scissors Game</h1>
+    
+    <button class="choice" data-choice="rock">Rock</button>
+    <button class="choice" data-choice="paper">Paper</button>
+    <button class="choice" data-choice="scissors">Scissors</button>
+    
+    
+    <div class="results"></div>
+    <div class="score"></div>
+
+    <script>
+        let humanScore = 0;
+        let computerScore = 0;
+
+        function getComputerChoice() {
+            const choices = ['rock', 'paper', 'scissors'];
+            const choice = Math.floor(Math.random() * 3);
+            return choices[choice];
+        }
+
+        function playRound(humanChoice, computerChoice) {
+            const resultsDiv = document.querySelector('.results');
+            
+            if (
+                (humanChoice === 'rock' && computerChoice === 'scissors') ||
+                (humanChoice === 'scissors' && computerChoice === 'paper') ||
+                (humanChoice === 'paper' && computerChoice === 'rock')
+            ) {
+                humanScore++;
+                resultsDiv.textContent = `You Win! ${humanChoice.charAt(0).toUpperCase() + humanChoice.slice(1)} beats ${computerChoice}.`;
+            } else if (humanChoice === computerChoice) {
+                resultsDiv.textContent = `It's a tie! Both chose ${humanChoice}.`;
+            } else {
+                computerScore++;
+                resultsDiv.textContent = `You Lose! ${computerChoice.charAt(0).toUpperCase() + computerChoice.slice(1)} beats ${humanChoice}.`;
+            }
+
+            updateScore();
+            checkWinner();
+        }
+
+        function updateScore() {
+            const scoreDiv = document.querySelector('.score');
+            scoreDiv.textContent = `Your Score: ${humanScore} | Computer Score: ${computerScore}`;
+        }
+
+        function checkWinner() {
+            const resultsDiv = document.querySelector('.results');
+            if (humanScore === 5) {
+                resultsDiv.textContent = "Congratulations! You won the game!";
+                resetGame();
+            } else if (computerScore === 5) {
+                resultsDiv.textContent = "You lost the game. Better luck next time!";
+                resetGame();
+            }
+        }
+
+        function resetGame() {
+            humanScore = 0;
+            computerScore = 0;
+            updateScore();
+        }
+
+        // Add event listeners to buttons
+        document.querySelectorAll('.choice').forEach(button => {
+            button.addEventListener('click', () => {
+                const playerChoice = button.getAttribute('data-choice');
+                playRound(playerChoice, getComputerChoice());
+            });
+        });
+
+        // Initialize score display
+        updateScore();
+    </script>
+</body>
+</html>
